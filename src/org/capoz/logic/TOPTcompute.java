@@ -7,12 +7,25 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 public class TOPTcompute {
+	
+	
 
-	public void compute() {
+	public String compute(String secretKey) {
 
 		int epochTime = getParsedEpochTime();
 		String encodedEpochTime = Integer.toString(epochTime);
-
+		
+		String digested = this.calcHmacSha256(secretKey, encodedEpochTime);
+	
+		int offSet = Integer.parseInt(digested.substring(digested.length()-1), 16);
+		
+		String digestedRes = digested.substring(offSet - (offSet % 2), offSet - (offSet % 2) + 8 );
+		int totp = (int) (Integer.parseInt(digestedRes, 16) % Math.pow(10 , 6));
+		String totpString = Integer.toString(totp);
+		if (totpString.length() == 5) {
+			totpString = "0".concat(totpString);
+		}
+		return totpString;
 	}
 
 	public static int getParsedEpochTime() {
@@ -47,7 +60,7 @@ public class TOPTcompute {
 
 	}
 
-	public static String calcHmacSha256(String secretKey, String message) {
+	public String calcHmacSha256(String secretKey, String message) {
 		String res = "";
 		byte[] hmacSha256 = null;
 		try {
