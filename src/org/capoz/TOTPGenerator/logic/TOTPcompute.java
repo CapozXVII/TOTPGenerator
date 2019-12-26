@@ -1,4 +1,4 @@
-package org.capoz.logic;
+package org.capoz.TOTPGenerator.logic;
 
 import java.util.Calendar;
 import javax.crypto.Mac;
