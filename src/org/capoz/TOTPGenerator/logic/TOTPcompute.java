@@ -1,12 +1,10 @@
 package org.capoz.TOTPGenerator.logic;
-
+import org.capoz.TOTPGenerator.interfaces.*;
 import java.util.Calendar;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-public class TOTPcompute {
-	
-	
+public class TOTPcompute implements GenerateTOTP{
 
 	public String compute(String secretKey) {
 
