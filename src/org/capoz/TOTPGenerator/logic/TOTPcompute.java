@@ -1,5 +1,6 @@
 package org.capoz.TOTPGenerator.logic;
 import org.capoz.TOTPGenerator.interfaces.*;
+
 import java.util.Calendar;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
