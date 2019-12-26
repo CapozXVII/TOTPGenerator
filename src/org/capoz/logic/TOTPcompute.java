@@ -6,7 +6,7 @@ import java.util.Calendar;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-public class TOPTcompute {
+public class TOTPcompute {
 	
 	
 
@@ -20,7 +20,7 @@ public class TOPTcompute {
 		int offSet = Integer.parseInt(digested.substring(digested.length()-1), 16);
 		
 		String digestedRes = digested.substring(offSet - (offSet % 2), offSet - (offSet % 2) + 8 );
-		int totp = (int) (Integer.parseInt(digestedRes, 16) % Math.pow(10 , 6));
+		int totp = (int) (Long.parseLong(digestedRes, 16) % Math.pow(10 , 6));
 		String totpString = Integer.toString(totp);
 		if (totpString.length() == 5) {
 			totpString = "0".concat(totpString);
@@ -33,26 +33,7 @@ public class TOPTcompute {
 		long lresTime = 0;
 		int iresTime = 0;
 
-		Date today = Calendar.getInstance().getTime();
-
-		// Constructs a SimpleDateFormat using the given pattern
-		SimpleDateFormat crunchifyFormat = new SimpleDateFormat("MMM dd yyyy HH:mm:ss.SSS zzz");
-
-		// format() formats a Date into a date/time string.
-		String currentTime = crunchifyFormat.format(today);
-
-		try {
-
-			// parse() parses text from the beginning of the given string to produce a date.
-			Date date = crunchifyFormat.parse(currentTime);
-
-			// getTime() returns the number of milliseconds since January 1, 1970, 00:00:00
-			// GMT represented by this Date object.
-			lresTime = date.getTime();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		lresTime = Calendar.getInstance().getTimeInMillis() /1000;
 
 		iresTime = (int) lresTime / 30;
 
@@ -65,7 +46,7 @@ public class TOPTcompute {
 		byte[] hmacSha256 = null;
 		try {
 			Mac mac = Mac.getInstance("HmacSHA256");
-			SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
+			SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), "HmacSHA256");
 			mac.init(secretKeySpec);
 			hmacSha256 = mac.doFinal(message.getBytes("ASCII"));
 		} catch (Exception e) {
